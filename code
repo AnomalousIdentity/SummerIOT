@@ -30,3 +30,53 @@ const boolean IS_METRIC = true;
 
 OpenWeatherMapCurrentData currentWeather;
 OpenWeatherMapForecastData forecastWeather[MAX_FORECASTS];
+
+void drawProgress(int percentage){
+  if (percentage == 0) {
+    tft.fillRect(6,52,116,10,ST77XX_BLACK);
+  }
+  tft.drawRect(4,50,120,14,ST77XX_WHITE);
+  tft.fillRect(6,52,116*percentage/100,10,ST77XX_WHITE);
+}
+void connectWiFi() {
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  tft.setCursor(10,30);
+  tft.setTextSize(1);
+  tft.setTextColor(ST77XX_WHITE);
+  tft.print("Welcome to IoT");
+  tft.setCursor(10,105);
+  tft.setTextSize(1);
+  tft.setTextColor(ST77XX_WHITE);
+  tft.print("Johnathan Zhang");
+  tft.setCursor(10,80);
+  tft.setTextSize(1);
+  tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
+  Serial.print("Connecting to " + String(WIFI_SSID));
+  int i = 0;
+  while(WiFi.status() != WL_CONNECTED) {
+    drawProgress(i);
+    i+=20;
+    if(i>99){
+      i=0;
+    }
+    delay(500);
+  }
+  drawProgress(100);
+  tft.setCursor(10,80);
+  tft.setTextSize(1);
+  tft.setTextColor(ST77XX_WHITE,ST77XX_BLACK);
+  tft.println("\nConnected to " + String(WIFI_SSID));
+}
+void updateWeatherPic(){
+  tft.drawRGBBitmap(50, 80, getSmallIcon(currentWeather.icon), ICON_WIDTH, ICON_HEIGHT);
+}
+void updateWeather(){
+  OpenWeatherMapCurrent currentWeatherClient;
+  currentWeatherClient.setMetric(IS_METRIC);
+  currentWeatherClient.setLanguage(OPEN_WEATHER_MAP_LANGUAGE);
+  currentWeatherClient.updateCurrent(&currentWeather,OPEN_WEATHER_MAP_APP_ID, OPEN_WEATHER_MAP_LOCATION);
+  
+  OpenWeatherMapForecast forecastWeatherClient;
+  forecastWeatherClient.setMetric(IS_METRIC);
+  forecastWeatherClient.setLanguage(OPEN_WEATHER_MAP_LANGUAGE);
+}
