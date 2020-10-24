@@ -1,0 +1,32 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7735.h>
+#include <ESP8266WiFi.h>
+#include <WiFiUDP.h>
+#include "NTPClientUpdated.h"
+#include <OpenWeatherMapCurrent.h>
+#include <OpenWeatherMapForecast.h>
+#include "weather_icon.h"
+
+#define MAX_FORECASTS 3
+
+#define TFT_CS 16
+#define TFT_RST 0
+#define TFT_DC 4
+
+#define WIFI_SSID "NETGEAR46"
+#define WIFI_PASS "redcanoe233"
+
+WiFiUDP ntpUDP;
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
+const long utcOffSetInSeconds = -7 * 3600;
+NTPClientUpdated timeClient(ntpUDP, utcOffSetInSeconds);
+String dateStamp, timeStamp, date, timee, weades, sunr, suns, weatherDesStamp, sunriseStamp, sunsetStamp, foredes, foredesStamp;
+double tempStamp, temp, forecast1, forecastStamp;
+
+String OPEN_WEATHER_MAP_LANGUAGE ="en";
+String OPEN_WEATHER_MAP_APP_ID="b8f79e15dc3c8d3401506a85f8afd7f7";
+String OPEN_WEATHER_MAP_LOCATION="Bellevue,WA,US";
+const boolean IS_METRIC = true;
+
+OpenWeatherMapCurrentData currentWeather;
+OpenWeatherMapForecastData forecastWeather[MAX_FORECASTS];
