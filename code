@@ -128,4 +128,12 @@ void loop() {
     
   }
   delay(1000);
+  date = dateStamp;
+  timee = timeStamp;
+  temp = tempStamp;
+  weades = weatherDesStamp;
+  sunr = sunriseStamp;
+  suns = sunsetStamp;
+  forecast1 = forecastStamp;
+  foredes = foredesStamp;
 }
